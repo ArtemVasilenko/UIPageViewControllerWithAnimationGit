@@ -9,15 +9,18 @@ class MyViewController: UIPageViewController {
     let audi = UIImage(named: "audi")
     let porshe = UIImage(named: "porshe")
     
+    let bmwLogo = UIImageView.fromGif(resourceName: "Frog")
+    let audiLogo = UIImageView.fromGif(resourceName: "Rept")
+    let porsheLogo = UIImageView.fromGif(resourceName: "monkey")
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         navigationItem.title = "Cars"
         
-        let bmwCar = CarsHelper(name: "BWM", image: bmw!)
-        let audiCar = CarsHelper(name: "AUDI", image: audi!)
-        let porsheCar = CarsHelper(name: "PORSHE", image: porshe!)
+        let bmwCar = CarsHelper(name: "BWM", image: bmw!, logoAnimation: bmwLogo!)
+        let audiCar = CarsHelper(name: "AUDI", image: audi!, logoAnimation: audiLogo!)
+        let porsheCar = CarsHelper(name: "PORSHE", image: porshe!, logoAnimation: porsheLogo!)
         
         cars = [bmwCar, audiCar, porsheCar]
         
@@ -80,6 +83,42 @@ extension MyViewController: UIPageViewControllerDataSource {
     
     func presentationIndex(for pageViewController: UIPageViewController) -> Int {
         return 0
+    }
+    
+}
+
+extension UIImageView {
+    
+    static func fromGif(resourceName: String) -> UIImageView? {
+        
+        guard let path = Bundle.main.path(forResource: resourceName, ofType: "gif") else {
+            print("not exist gif")
+            return nil
+        }
+        
+        let url = URL(fileURLWithPath: path)
+        
+        guard let gifData = try? Data(contentsOf: url),
+            let source = CGImageSourceCreateWithData(gifData as CFData, nil)
+            else {
+                return nil
+        }
+        
+        var images = [UIImage]()
+        let imageCount = CGImageSourceGetCount(source)
+        print("images count = \(imageCount)")
+        
+        for i in 0..<imageCount {
+            if let image = CGImageSourceCreateImageAtIndex(source, i, nil) {
+                images.append(UIImage(cgImage: image))
+            }
+        }
+        
+        let gifImageVIew = UIImageView()
+        
+        gifImageVIew.animationImages = images
+        
+        return gifImageVIew
     }
     
 }

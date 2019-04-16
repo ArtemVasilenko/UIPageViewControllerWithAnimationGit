@@ -30,8 +30,17 @@ class CarViewController: UIViewController {
         return name
     }()
     
+    private var logoAnimate: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFit
+        
+        
+        return imageView
+    }()
     
-    lazy var subview: [UIView] = [self.carImage, self.carName]
+    
+    lazy var subview: [UIView] = [self.carImage, self.carName, self.logoAnimate]
     
     
     init(carWith: CarsHelper) {
@@ -40,6 +49,7 @@ class CarViewController: UIViewController {
         
         self.carName.text = carWith.name
         self.carImage.image = carWith.image
+        self.logoAnimate = carWith.logoAnimation
         
         //        edgesForExtendedLayout = [] //бровь десятки не закроет
         
@@ -60,6 +70,13 @@ class CarViewController: UIViewController {
         NSLayoutConstraint.activate([
             NSLayoutConstraint(item: carName, attribute: .top, relatedBy: .equal, toItem: carImage, attribute: .bottom, multiplier: 1, constant: 50),
             NSLayoutConstraint(item: carName, attribute: .centerX, relatedBy: .equal, toItem: view, attribute: .centerX, multiplier: 1, constant: 0)])
+        
+        NSLayoutConstraint.activate([
+            NSLayoutConstraint(item: logoAnimate, attribute: .top, relatedBy: .equal, toItem: carName, attribute: .bottom, multiplier: 1, constant: 10),
+            NSLayoutConstraint(item: logoAnimate, attribute: .centerX, relatedBy: .equal, toItem: view, attribute: .centerX, multiplier: 1, constant: 0),
+            NSLayoutConstraint(item: logoAnimate, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 100),
+            NSLayoutConstraint(item: logoAnimate, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 100)
+            ])
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -68,5 +85,11 @@ class CarViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+//        logoAnimate.startAnimating()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        logoAnimate.startAnimating()
+
     }
 }
