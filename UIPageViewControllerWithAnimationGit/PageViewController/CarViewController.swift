@@ -49,7 +49,8 @@ class CarViewController: UIViewController {
         
         self.carName.text = carWith.name
         self.carImage.image = carWith.image
-        self.logoAnimate = carWith.logoAnimation
+        self.logoAnimate.animationImages = carWith.logoAnimation.animationImages
+        
         
         //        edgesForExtendedLayout = [] //бровь десятки не закроет
         
